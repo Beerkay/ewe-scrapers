@@ -5,3 +5,9 @@
 .pydevproject
 scraped_data
 id_datastore
+
+# virtualenv
+venv
+
+# scrapped data
+scrapped_data

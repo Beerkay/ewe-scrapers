@@ -36,30 +36,32 @@ class ChannelItem(Item):
         All fields included can be populated using information scrapped
         from ifttt's website. 
     '''
-    ewe_class = 'ewe:Channel' 
+    # Template name for jinjaExporter
     template = 'channel'
+#     ewe_class = 'ewe:Channel' 
     
     # Fields    
     id = Field()  # Not a number a unique string
+    class_name = Field()
     
-    title_label = 'dcterms:title'
+#     title_label = 'dcterms:title'
     title = Field()
     
-    description_label = 'dcterms:description'    
+#     description_label = 'dcterms:description'    
     description = Field()
     
-    commercial_url_label = 'foaf:url'
+#     commercial_url_label = 'foaf:url'
     commercial_url = Field()
     
-    logo_label = 'foaf:logo'
+#     logo_label = 'foaf:logo'
     logo = Field()
     
-    events_generated_label = 'ewe:generatesEvent'
-    events_generated_asAttr = True
+#     events_generated_label = 'ewe:generatesEvent'
+#     events_generated_asAttr = True
     events_generated = Field()
     
-    actions_provided_label = 'ewe:hasAction'
-    actions_provided_asAttr = True
+#     actions_provided_label = 'ewe:hasAction'
+#     actions_provided_asAttr = True
     actions_provided = Field()
 
     def __str__(self, *args, **kwargs):
@@ -73,18 +75,18 @@ class EventItem(Item):
     # Fields
     id = Field()
     
-    title_label = 'dcterms:title'
+#     title_label = 'dcterms:title'
     title = Field()
     
-    description_label = 'dcterms:description'
+#     description_label = 'dcterms:description'
     description = Field()
     
-    input_parameters_label = 'ewe:hasInputParameter'
-    input_parameters_asAttr = True
+#     input_parameters_label = 'ewe:hasInputParameter'
+#     input_parameters_asAttr = True
     input_parameters = Field()
     
-    output_parameters_label = 'ewe:hasOutputParameter'
-    output_parameters_asAttr = True
+#     output_parameters_label = 'ewe:hasOutputParameter'
+#     output_parameters_asAttr = True
     output_parameters = Field()
     
     def __str__(self, *args, **kwargs):
@@ -98,14 +100,14 @@ class ActionItem(Item):
     # Fields
     id = Field()
     
-    title_label = 'dcterms:title'
+#     title_label = 'dcterms:title'
     title = Field()
     
-    description_label = 'dcterms:description'
+#     description_label = 'dcterms:description'
     description = Field()
     
-    input_parameters_label = 'ewe:hasInputParameter'
-    input_parameters_asAttr = True
+#     input_parameters_label = 'ewe:hasInputParameter'
+#     input_parameters_asAttr = True
     input_parameters = Field()
     
     def __str__(self, *args, **kwargs):
@@ -117,13 +119,13 @@ class InputParameterItem(Item):
     ewe_class = 'ewe:InputParameter' 
     
     # Fields
-    title_label = 'dcterms:title'
+#     title_label = 'dcterms:title'
     title = Field()
     
-    description_label = 'dcterms:description'
+#     description_label = 'dcterms:description'
     description = Field()
     
-    type_label = 'xsd:type'
+#     type_label = 'xsd:type'
     type = Field()
     
     def __str__(self, *args, **kwargs):
@@ -135,13 +137,13 @@ class OutputParameterItem(Item):
     ewe_class = 'ewe:OutputParameter' 
     
     # Fields
-    title_label = 'dcterms:title'
+#     title_label = 'dcterms:title'
     title = Field()
     
-    description_label = 'dcterms:description'
+#     description_label = 'dcterms:description'
     description = Field()  # Name + Notes
     
-    example_label = 'ewe:example'
+#     example_label = 'ewe:example'
     example = Field()
 
     def __str__(self, *args, **kwargs):

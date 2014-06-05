@@ -60,14 +60,29 @@ class IftttChannelSpider(CrawlSpider):
                    ]
 
     rules = (Rule (SgmlLinkExtractor(#allow=("https://ifttt.com/[\_\w]+$"),
-                                     allow=("https://ifttt.com/sms"), 
+                                     #allow=("https://ifttt.com/sms"),
+                                     allow=("https://ifttt.com/twitter"), 
                                      deny=("terms$", "login$", "privacy$", "jobs$", "contact$", "join$", "channels$", "wtf$")),
                     callback="parse_channel"),
     )
     
 
     def parse_channel(self, response):
-        ''' This function parses a channel page. 
+        ''' This function parses a channel page.
+         
+            It performs two basic tasks:
+            * First, it extracts those fields that are accesible from the 
+              main channel page. Those are the title, the descrtiption, 
+              the id, etc.
+            * Then it extracts all urls that are related to either channels
+              or actions. These will be scrapped next, but they need the 
+              reference to the channel they are associated to.
+              
+              To do so, it wraps these urls as Response objects, assigns 
+              them a callback function (parse_event for event urls and 
+              parse_action for action urls) and stores them in an array. 
+              This
+                 
             Some contracts are mingled with this docstring.
         
             @url https://ifttt.com/bitly
@@ -108,7 +123,7 @@ class IftttChannelSpider(CrawlSpider):
             @returns requests 0
             @scrapes id title description
         '''
-        log.msg("Parse event at " + str(response.url), level=log.DEBUG)
+        log.msg("Parse event at %s" % response.url, level=log.DEBUG)
         
         loader = EventActionLoader(item=EventItem(), response=response)
         loader.add_value('id', response.url)
@@ -140,7 +155,8 @@ class IftttChannelSpider(CrawlSpider):
             @returns requests 0
             @scrapes id title description input_parameters
         '''        
-        log.msg("Parse action at " + str(response.url), level=log.DEBUG)
+        log.msg("Parse action at %s" % response.url, level=log.DEBUG)
+        
         loader = EventActionLoader(item=ActionItem(), response=response)
         loader.add_value('id', response.url)
         loader.add_xpath('title', '//div[@class="show-trigger-action-show"]/div/div[@class="ta_title"]/text()')
@@ -173,9 +189,10 @@ class IftttChannelSpider(CrawlSpider):
             table row, so the xpath used to extract the data rely on that. 
         '''
         loader = BaseEweLoader(item=OutputParameterItem(), selector=selector)
-        loader.add_xpath('title', 'td[2]/div/text()')
-        loader.add_xpath('description', 'td[4]/text()')
-        loader.add_xpath('example', 'td[3]/text()')
+#         loader.add_xpath('title', 'td[2]/div/text()')
+        loader.add_xpath('title', 'td/div[@class="ingredient_name"]/text()')
+        loader.add_xpath('description', 'td[3]/text()')
+        loader.add_xpath('example', 'td[2]/text()')
         return loader.load_item()
 
 
@@ -186,7 +203,7 @@ class IftttChannelSpider(CrawlSpider):
         loader.add_xpath('description', 'descendant::div[@class="action_field_helper_text"]/text()')
         return loader.load_item()
 
-
+    
     def _dispatch_request(self, response):
         ''' Helper method that fetches the list of pending requests,
             pops one, sets the metadata properly and returns it. 
@@ -200,5 +217,3 @@ class IftttChannelSpider(CrawlSpider):
             return rq
         else:
             return response.meta['loader'].load_item()
-    
-    

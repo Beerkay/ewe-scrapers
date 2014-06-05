@@ -13,6 +13,7 @@ import re
 import unicodedata
 import urlparse
 
+
 def strip(s):
     ''' This performs some html2text operations to remove html tags before 
         stripping all remaining all whitespaces at the beggining or end of the given 
@@ -52,6 +53,7 @@ def strip(s):
 #         return strip(str(s))
     
     return s  # If not str or unicode, do nothing
+
 
 def erase_channel(s):
     ''' This function removes the word 'Channel' at the end of the string given.
@@ -117,6 +119,7 @@ class ChannelLoader(BaseEweLoader):
     
     events_generated_out = Identity()
     actions_provided_out = Identity()
+
     
 class EventActionLoader(BaseEweLoader):
     ''' EventItem and Action item loaders. In addition to BaseEweLoader, 

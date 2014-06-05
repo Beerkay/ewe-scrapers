@@ -88,8 +88,9 @@ class IdRegistryPipeline(object):
 
 
     def _register_item(self, item):
-        
+        ''' '''
         log.msg("[IdRegistryPipeline] Register_item:" + str(item), level=log.DEBUG)
+        
         if type(item) in [ChannelItem, EventItem, ActionItem]:
             # Register new ids
             if not item['title']:
