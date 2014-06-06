@@ -5,6 +5,7 @@
  <!ENTITY owl "http://www.w3.org/2002/07/owl#" > 
  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" > 
  <!ENTITY ewe "http://gsi.dit.upm.es/ontologies/ewe/ns/" >
+ <!ENTITY ewe-ifttt "http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/" >
  <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" > 
  <!ENTITY dcterms "http://purl.org/dc/terms/" >
@@ -16,16 +17,21 @@
 	xmlns:owl="http://www.w3.org/2002/07/owl#" 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
 	xmlns:ewe="http://gsi.dit.upm.es/ontologies/ewe/ns/" 
+	xmlns:ewe-ifttt="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
 	xmlns:dcterms="http://purl.org/dc/terms/" 
-	xmlns:tags="http://www.holygoat.co.uk/owl/redwood/0.1/tags/" 
-	xmlns="http://gsi.dit.upm.es/ontologies/ewe/ns/">
+	xmlns:tags="http://www.holygoat.co.uk/owl/redwood/0.1/tags/">
 	
-  <owl:Class rdf:about="{{ item['id'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Channel"/>
+  <owl:Class rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ item['class_name'] }}">
+    <rdfs:subClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Channel"/>
+    <rdfs:seeAlso>
+      <owl:Class>
+        <foaf:url>{{ item['id'] }}</foaf:url>
+      </owl:Class>
+    </rdfs:seeAlso>
     {% if item['title'] -%}
-    <rdfs:label>{{ item['title'] }}</rdfs:label>
+    <rdfs:label xml:lang="en">{{ item['title'] }}</rdfs:label>
     <dcterms:title>{{ item['title'] }}</dcterms:title>
     {% endif -%}
     {% if item['description'] -%}
@@ -50,104 +56,90 @@
   <!-- Event Listing -->
   {% for event in item['events_generated'] -%}
   <!-- Event -->  
-  <owl:Class rdf:about="{{ event['id'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Event"/> 
+  <owl:Class rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ event['class_name'] }}">
+    <rdfs:subClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Event"/>
+    <rdfs:seeAlso>
+      <owl:Class>
+        <foaf:url>{{ event['id'] }}</foaf:url>
+      </owl:Class>
+    </rdfs:seeAlso> 
     {% if event['title'] -%}
-    <rdfs:label>{{ event['title'] }}</rdfs:label> 
+    <rdfs:label xml:lang="en">{{ event['title'] }}</rdfs:label> 
     <dcterms:title>{{ event['title'] }}</dcterms:title> 
     {% endif -%}
     {% if event['description'] -%}
     <dcterms:description>{{ event['description'] }}</dcterms:description>
     {% endif -%}
-    <!-- Parameter reference -->
-    {%- for oparam in event['output_parameters'] %}
-    <ewe:hasOutputParameter rdf:resource="{{ oparam['title'] }}" />
-    {%- endfor %}
-    {%- for iparam in event['input_parameters'] %}
-    <ewe:hasInputParameter rdf:resource="{{ iparam['title'] }}" />
-    {%- endfor %}
   </owl:Class>
   {% for oparam in event['output_parameters'] %}
-  <owl:Class rdf:about="{{ oparam['title'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/OutputParameter"/> 
+  <owl:DatatypeProperty rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ oparam['class_name'] }}">
+    <rdfs:subPropertyOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/hasOutputParameter"/> 
     {% if oparam['title'] -%}
-    <rdfs:label>{{ oparam['title'] }}</rdfs:label> 
-    <dcterms:title>{{ oparam['title'] }}</dcterms:title>
+    <rdfs:label xml:lang="en">{{ oparam['title'] }}</rdfs:label> 
     {% endif -%}
     {% if oparam['description'] -%}
-    <dcterms:description>{{ oparam['description'] }}</dcterms:description> 
+    <rdfs:comment xml:lang="en">{{ oparam['description'] }}</rdfs:comment> 
     {% endif -%}
     {% if oparam['example'] -%}
-    <ewe:example>{{ oparam['example'] }}</ewe:example>
+    <rdfs:comment xml:lang="en">Example: {{ oparam['example'] }}</rdfs:comment>
     {%- endif %}
-  </owl:Class>
+    <rdfs:domain rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ event['class_name'] }}" />
+  </owl:DatatypeProperty>
   {% endfor %}
   {% for iparam in event['input_parameters'] -%}
-  <owl:Class rdf:about="{{ iparam['title'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/InputParameter"/> 
+  <owl:DatatypeProperty rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ iparam['class_name'] }}">
+    <rdfs:subPropertyOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/hasInputParameter"/> 
     {% if iparam['title'] -%}
-    <rdfs:label>{{ iparam['title'] }}</rdfs:label> 
-    <dcterms:title>{{ iparam['title'] }}</dcterms:title> 
+    <rdfs:label xml:lang="en">{{ iparam['title'] }}</rdfs:label> 
     {%- endif %}
     {% if iparam['description'] -%}
-    <dcterms:description>{{ iparam['description'] }}</dcterms:description> 
+    <rdfs:comment xml:lang="en">E{{ iparam['description'] }}</rdfs:comment> 
     {%- endif %}
-    {% if iparam['type'] -%}
-    <xsd:type>{{ iparam['type'] }}</xsd:type> 
-    {%- endif %}
-  </owl:Class>
+    <rdfs:domain rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ event['class_name'] }}" />
+  </owl:DatatypeProperty >
   {%- endfor %}
 
   {% endfor -%}
   <!-- Action Listing -->
   {% for action in item['actions_provided'] -%}
   <!-- Action -->
-  <owl:Class rdf:about="{{ action['id'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Action"/> 
+  <owl:Class rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ action['class_name'] }}">
+    <rdfs:subPropertyOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/Action"/>
+    <rdfs:seeAlso>
+      <owl:Class>
+        <foaf:url>{{ action['id'] }}</foaf:url>
+      </owl:Class>
+    </rdfs:seeAlso> 
     {% if action['title'] -%}
-    <rdfs:label>{{ action['title'] }}</rdfs:label> 
-    <dcterms:title>{{ action['title'] }}</dcterms:title>
+    <rdfs:label xml:lang="en">{{ action['title'] }}</rdfs:label> 
     {%- endif %}
     {% if action['description'] -%}
-    <dcterms:description>{{ action['description'] }}</dcterms:description>
+    <rdfs:comment xml:lang="en">{{ action['description'] }}</rdfs:comment>
     {%- endif %}
-    <!-- Parameter reference -->
-    {%- for oparam in action['output_parameters'] %}
-    <ewe:hasOutputParameter rdf:resource="{{ oparam['title'] }}" />
-    {%- endfor %}
-    {%- for iparam in action['input_parameters'] %}
-    <ewe:hasInputParameter rdf:resource="{{ iparam['title'] }}" /> 
-    {%- endfor %}
   </owl:Class>
   {% for oparam in action['output_parameters'] %}
-  <owl:Class rdf:about="{{ oparam['title'] }}">
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/OutputParameter"/> 
+  <owl:DatatypeProperty rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ oparam['class_name'] }}">
+    <rdfs:subPropertyOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/hasOutputParameter"/> 
     {% if oparam['title'] -%}
-    <rdfs:label>{{ oparam['title'] }}</rdfs:label> 
-    <dcterms:title>{{ oparam['title'] }}</dcterms:title>
+    <rdfs:label xml:lang="en">{{ oparam['title'] }}</rdfs:label> 
     {%- endif %}
     {% if oparam['description'] -%}
-    <dcterms:description>{{ oparam['description'] }}</dcterms:description>
+    <rdfs:comment xml:lang="en">{{ oparam['description'] }}</rdfs:comment>
     {% endif -%}
-    {% if oparam['example'] -%}
-    <ewe:example>{{ oparam['example'] }}</ewe:example>
-    {%- endif %}
-  </owl:Class>
+    <rdfs:domain rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ action['class_name'] }}" />
+  </owl:DatatypeProperty >
   {% endfor %}
   {% for iparam in action['input_parameters'] -%}
-  <owl:Class rdf:about="{{ iparam['title'] }}" >
-    <rdfs:SubClassOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/InputParameter"/> 
+  <owl:DatatypeProperty rdf:about="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ iparam['class_name'] }}" >
+    <rdfs:subPropertyOf rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ns/hasInputParameter"/> 
     {% if iparam['title'] -%}
-    <rdfs:label>{{ iparam['title'] }}</rdfs:label> 
-    <dcterms:title>{{ iparam['title'] }}</dcterms:title>
+    <rdfs:label xml:lang="en">{{ iparam['title'] }}</rdfs:label> 
     {%- endif %}
     {% if iparam['description'] -%}
-    <dcterms:description>{{ iparam['description'] }}</dcterms:description>
+    <rdfs:comment xml:lang="en">{{ iparam['description'] }}</rdfs:comment>
     {% endif -%}
-    {% if iparam['type'] -%}
-    <xsd:type>{{ iparam['type'] }}</xsd:type>
-    {%- endif %}
-  </owl:Class>
+    <rdfs:domain rdf:resource="http://gsi.dit.upm.es/ontologies/ewe/ifttt/ns/{{ action['class_name'] }}" />
+  </owl:DatatypeProperty >
   {%- endfor %}
   {% endfor %}
 </rdf:RDF>

@@ -171,3 +171,41 @@ class RemoveEmptyItemsPipeline(object):
             
         return ret
 
+
+class GenerateClassNamePipeline(object):
+    ''' This pipeline populates the className fields of the item. It does so 
+        applying camel case to the phrase stored as title.
+        
+        Numbers remain the same. Dots are replced by the 'dot' word
+    '''
+    
+    def __init__(self):
+        log.msg("[GenerateClassNamePipeline] Initialize...", level=log.DEBUG)
+        
+    def process_item(self, item, spider):
+        return self._process_item(item)
+    
+    def _process_item(self, item):
+        ''' Camel case title and assign it to  '''
+        # If title is populated and class_name is a declared field...
+        
+        log.msg("[GenerateClassNamePipeline] Process item %s" % item, level=log.DEBUG)
+        # Because of recursiveness we may find args that are not items
+        if not isinstance(item, Item): 
+            return item
+        
+        # iterate over the fields
+        for field, value in item.items():
+            log.msg("[RemoveEmptyItemsPipeline] Found field " + str(field) + ":" + repr(value) , level=log.DEBUG)
+            if isinstance(value, Item):
+                self._process_item(item)  # Field items  re-assign
+            elif isinstance(value, list):
+                for i in value:
+                    self._process_item(i)
+            elif 'title' in item and 'class_name' in item.fields:
+                camel = ''.join(x for x in item['title'].title() if not x.isspace())
+                log.msg("[GenerateClassNamePipeline] Add class name %s" % camel, level=log.DEBUG)
+                item['class_name'] = camel
+                
+        return item
+        

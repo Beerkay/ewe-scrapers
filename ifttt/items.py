@@ -42,7 +42,7 @@ class ChannelItem(Item):
     
     # Fields    
     id = Field()  # Not a number a unique string
-    class_name = Field()
+    class_name = Field() # populated by pipeline
     
 #     title_label = 'dcterms:title'
     title = Field()
@@ -77,6 +77,7 @@ class EventItem(Item):
     
 #     title_label = 'dcterms:title'
     title = Field()
+    class_name = Field() # populated by pipeline
     
 #     description_label = 'dcterms:description'
     description = Field()
@@ -99,6 +100,7 @@ class ActionItem(Item):
     
     # Fields
     id = Field()
+    class_name = Field() # populated by pipeline
     
 #     title_label = 'dcterms:title'
     title = Field()
@@ -121,6 +123,7 @@ class InputParameterItem(Item):
     # Fields
 #     title_label = 'dcterms:title'
     title = Field()
+    class_name = Field() # populated by pipeline
     
 #     description_label = 'dcterms:description'
     description = Field()
@@ -139,6 +142,7 @@ class OutputParameterItem(Item):
     # Fields
 #     title_label = 'dcterms:title'
     title = Field()
+    class_name = Field() # populated by pipeline
     
 #     description_label = 'dcterms:description'
     description = Field()  # Name + Notes

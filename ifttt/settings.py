@@ -18,8 +18,8 @@ ITEM_PIPELINES = [
     'ifttt.pipelines.RemoveEmptyItemsPipeline',
     # 'ifttt.pipelines.LogPipeline',
     # 'ifttt.pipelines.FileExporterPipeline',
+    'ifttt.pipelines.GenerateClassNamePipeline',
     'ifttt.pipelines.IdRegistryPipeline'
-    
     ]
 
 FEED_EXPORTERS = {

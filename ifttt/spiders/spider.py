@@ -60,8 +60,8 @@ class IftttChannelSpider(CrawlSpider):
                    ]
 
     rules = (Rule (SgmlLinkExtractor(#allow=("https://ifttt.com/[\_\w]+$"),
-                                     #allow=("https://ifttt.com/sms"),
-                                     allow=("https://ifttt.com/twitter"), 
+                                    allow=("https://ifttt.com/sms"),
+                                    allow=("https://ifttt.com/twitter"), 
                                      deny=("terms$", "login$", "privacy$", "jobs$", "contact$", "join$", "channels$", "wtf$")),
                     callback="parse_channel"),
     )
